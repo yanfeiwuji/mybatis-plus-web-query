@@ -7,14 +7,12 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.annotation.Order;
-import org.springframework.objenesis.instantiator.util.ClassUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,8 +34,7 @@ public class QueryAop {
 
   private static final String DEFAULT_QUERY_CLASS = "com.yfwj.web.query.BaseQuery";
 
-  // 切getMapping 和baseQuery
-
+  //  和baseQuery
   @Before(value = "execution(public * *(com.yfwj.web.query.BaseQuery,..))")
   public void queryBefore(JoinPoint joinPoint) {
     // not null
