@@ -1,4 +1,4 @@
-package com.yfwj.web.query;
+package io.github.yanfeiwuji.web.query;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.json.JSONObject;
@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Data
 public class BaseQuery<T> {
 
+
   @Getter
   @Setter
   private PageVo page;
@@ -46,10 +47,25 @@ public class BaseQuery<T> {
 
 
   public Page<T> page() {
-    return new Page<T>()
-      .setCurrent(page.getCurrent())
-      .setSize(page.getSize())
-      .addOrder(page.getOrders());
+    Page<T> needPage = new Page<>();
+
+    if (page == null) {
+      return needPage;
+    }
+
+    if (page.getCurrent() != null) {
+      needPage.setCurrent(page.getCurrent());
+    }
+
+    if (page.getSize() != null) {
+      needPage.setSize(page.getSize());
+    }
+
+    if (page.getOrders() != null) {
+      needPage.setOrders(page.getOrders());
+    }
+
+    return needPage;
   }
 
   public QueryWrapper<T> query() {
@@ -60,6 +76,7 @@ public class BaseQuery<T> {
     for (Map.Entry<String, String[]> e : entries) {// 只取第一个值
       final String[] values = e.getValue();
       String key = e.getKey();
+      Arrays.stream(values).forEach(System.out::println);
       QueryWrapperUtil.installWrapper(findQueryClass(), wrapper, key, values[0]);
     }
     return wrapper;

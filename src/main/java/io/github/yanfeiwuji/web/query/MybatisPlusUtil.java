@@ -1,6 +1,7 @@
-package com.yfwj.web.query;
+package io.github.yanfeiwuji.web.query;
 
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import lombok.experimental.UtilityClass;
 
@@ -24,15 +25,22 @@ public class MybatisPlusUtil {
     if (column != null) {
       return column;
     }
+    //String putColumn = null;
 
-    String putColumn = TableInfoHelper.getTableInfo(c)
+
+    final TableInfo tableInfo = TableInfoHelper.getTableInfo(c);
+
+    // property 前面过滤过了
+    String putColumn = tableInfo
       .getFieldList()
       .stream()
       .filter(tableFieldInfo ->
         tableFieldInfo.getProperty().equals(property)
       ).map(TableFieldInfo::getColumn)
       .findFirst()
-      .orElse(null);
+      .orElse(tableInfo.getKeyColumn());
+
+
     cache.put(getKey(c, property), putColumn);
     return putColumn;
   }

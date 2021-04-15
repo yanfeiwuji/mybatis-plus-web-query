@@ -1,4 +1,4 @@
-package com.yfwj.web.query;
+package io.github.yanfeiwuji.web.query;
 
 import cn.hutool.json.JSONObject;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class QueryCacheKeyConfig {
+
 
   @Bean
   public CustomQueryCacheKey customQueryCacheKey() {

@@ -1,4 +1,4 @@
-package com.yfwj.web.query;
+package io.github.yanfeiwuji.web.query;
 
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import lombok.Data;
@@ -15,4 +15,5 @@ public class PageVo {
   private Long current;
   private Long size;
   private List<OrderItem> orders;
+
 }

@@ -1,9 +1,11 @@
-package com.yfwj.web.query;
+package io.github.yanfeiwuji.web.query;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.experimental.UtilityClass;
+
+import java.util.regex.Pattern;
 
 /**
  * @author yanfeiwuji
@@ -16,9 +18,11 @@ public class QueryWrapperUtil {
 
     String needKey = key.replaceFirst(QueryConst.BEGIN, "")
       .replaceFirst(QueryConst.END, "");
+
     String dbColumn = MybatisPlusUtil.entityPropertyToColumn(queryClass, needKey);
 
     //  final Set<String> rule = Arrays.stream(QueryRuleEnum.values()).map(QueryRuleEnum::getValue).collect(Collectors.toSet());
+
 
     final QueryRuleEnum queryRuleEnum = QueryRuleEnum.valueToQueryRuleEnum(value);
 
@@ -45,8 +49,6 @@ public class QueryWrapperUtil {
       return;
     }
     installWrapperSingle(queryWrapper, key, value, dbColumn);
-
-
   }
 
   private void installWrapperByQueryRuleEnum(
@@ -79,12 +81,7 @@ public class QueryWrapperUtil {
 
     String pureValue = value.replaceFirst(QueryConst.NOT_MARKER, "");
 
-    boolean isMult = pureValue.contains(QueryConst.COMMA);
-    if (isMult) {
-      queryWrapper.notIn(dbColumn, pureValue.split(","));
-    } else {
-      queryWrapper.ne(dbColumn, value);
-    }
+    queryWrapperAddNot(queryWrapper, dbColumn, pureValue);
   }
 
   private void installWrapperByMult(QueryWrapper queryWrapper, String key, String value, String dbColumn) {
@@ -102,16 +99,12 @@ public class QueryWrapperUtil {
   }
 
   private void installWrapperByBeginAndEnd(QueryWrapper queryWrapper, String key, String value, String dbColumn) {
-    String needKey = key.replaceFirst(QueryConst.BEGIN, "")
-      .replaceFirst(QueryConst.END, "");
-    if (key.endsWith(QueryConst.BEGIN)) {
 
+    if (key.endsWith(QueryConst.BEGIN)) {
       queryWrapper.ge(NumberUtil.isNumber(value), dbColumn, DateUtil.date(NumberUtil.parseLong(value)).toJdkDate());
     } else if (key.endsWith(QueryConst.END)) {
-
       queryWrapper.le(NumberUtil.isNumber(value), dbColumn, DateUtil.date(NumberUtil.parseLong(value)).toJdkDate());
     }
-
   }
 
   private void installWrapperSingle(QueryWrapper queryWrapper, String key, String value, String dbColumn) {
@@ -125,14 +118,52 @@ public class QueryWrapperUtil {
     } else if (value.endsWith(QueryConst.LIKE)) {
       final String needValue = value.substring(0, value.length() - 1);
       queryWrapper.likeRight(dbColumn, needValue);
+    } else if (QueryConst.NULL_MARKER.equalsIgnoreCase(value)) {
+      queryWrapper.isNull(dbColumn);
+    } else if (value.startsWith(QueryConst.NOT_MARKER)) {
+      final String pureValue = value.substring(1);
+      queryWrapperAddNot(queryWrapper, dbColumn, pureValue);
     } else {
       queryWrapper.eq(dbColumn, value);
     }
   }
 
 
+  private void queryWrapperAddNot(QueryWrapper queryWrapper, String dbColumn, String pureValue) {
+
+    // 多值
+    if (pureValue.startsWith(QueryConst.lEFT_BRACKET) &&
+      pureValue.endsWith(QueryConst.RIGHT_BRACKET) &&
+      pureValue.contains(QueryConst.COMMA)
+    ) {
+      String pureValues = pureValue.substring(1, pureValue.length() - 1);
+      queryWrapper.notIn(dbColumn, pureValues.split(QueryConst.COMMA));
+      return;
+    }
+
+    if (QueryConst.NULL_MARKER.equalsIgnoreCase(pureValue)) {
+      queryWrapper.isNotNull(dbColumn);
+    } else if (pureValue.startsWith(QueryConst.lEFT_BRACKET) &&
+      pureValue.endsWith(QueryConst.RIGHT_BRACKET)
+    ) {
+      String pure = pureValue.substring(1, pureValue.length() - 1);
+      queryWrapper.ne(dbColumn, pure);
+    } else {
+      queryWrapper.ne(dbColumn, pureValue);
+
+    }
+  }
+
   private String valueToNeed(String value) {
+
     return value.split(" ", 2)[1];
+  }
+
+  private static final Pattern p0 = Pattern.compile("\\(.*?\\)");
+  private static final Pattern p = Pattern.compile(",.*?,");
+
+  public static void main(String[] args) {
+
   }
 
 

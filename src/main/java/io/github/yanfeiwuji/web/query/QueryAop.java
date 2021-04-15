@@ -1,4 +1,4 @@
-package com.yfwj.web.query;
+package io.github.yanfeiwuji.web.query;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -35,7 +35,7 @@ public class QueryAop {
   private static final String DEFAULT_QUERY_CLASS = "com.yfwj.web.query.BaseQuery";
 
   //  和baseQuery
-  @Before(value = "execution(public * *(com.yfwj.web.query.BaseQuery,..))")
+  @Before(value = "execution(public * *(io.github.yanfeiwuji.web.query.BaseQuery,..))")
   public void queryBefore(JoinPoint joinPoint) {
     // not null
     RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
@@ -55,9 +55,9 @@ public class QueryAop {
       queryClassName = matcher.group().replaceFirst(QUERY_PREFIX, "").replace(QUERY_SUFFIX, "");
     }
     // 不包含. 为泛形
-
+    System.out.println(queryClassName);
     if (queryClassName != null) {
-      if (queryClassName.contains(QueryConst.DOT)) {
+      if (queryClassName.contains(DEFAULT_QUERY_CLASS) && queryClassName.contains(QueryConst.DOT)) {
         queryClassName = getTQueryClass(joinPoint);
       }
     }
@@ -70,6 +70,7 @@ public class QueryAop {
   // 获取泛形的T class
   private String getTQueryClass(JoinPoint joinPoint) {
     final Class<?> targetClass = AopUtils.getTargetClass(joinPoint.getTarget());
+
     final Type[] actualTypeArguments = ((ParameterizedType) targetClass.getGenericSuperclass()).getActualTypeArguments();
     if (actualTypeArguments.length >= 1) {
       return actualTypeArguments[0].getTypeName();

@@ -1,4 +1,4 @@
-package com.yfwj.web.query;
+package io.github.yanfeiwuji.web.query;
 
 /**
  * @author yanfeiwuji

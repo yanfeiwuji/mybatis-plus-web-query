@@ -1,5 +1,7 @@
-package com.yfwj.web.query;
+package io.github.yanfeiwuji.web.query;
 
+
+import cn.hutool.core.util.StrUtil;
 
 /**
  * @author yanfeiwuji
@@ -22,4 +24,10 @@ public interface QueryConst {
   String COLON = ":";
 
   String DOT = ".";
+
+  String lEFT_BRACKET = "(";
+
+  String RIGHT_BRACKET = ")";
+
+  String OR_MARK = "or";
 }

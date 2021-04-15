@@ -1,4 +1,4 @@
-package com.yfwj.web.query;
+package io.github.yanfeiwuji.web.query;
 
 
 import lombok.Getter;
@@ -6,10 +6,8 @@ import lombok.Getter;
 import java.util.Arrays;
 
 /**
- * Query 规则 常量
- *
- * @Author Scott
- * @Date 2019年02月14日
+ * @author yanfeiwuji
+ * @date 2021/3/27 6:26 下午
  */
 @Getter
 public enum QueryRuleEnum {

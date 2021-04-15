@@ -1,4 +1,4 @@
-package com.yfwj.web.query;
+package io.github.yanfeiwuji.web.query;
 
 import cn.hutool.json.JSONObject;
 
@@ -9,4 +9,6 @@ import cn.hutool.json.JSONObject;
 @FunctionalInterface
 public interface CustomQueryCacheKey {
   String jsonToCacheKey(JSONObject jsonObject);
+
+
 }

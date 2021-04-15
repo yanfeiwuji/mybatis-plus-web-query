@@ -1,4 +1,4 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.yfwj.web.query.QueryAop,\
-  com.yfwj.web.query.QueryCacheKeyConfig
+  io.github.yanfeiwuji.web.query.QueryAop,\
+  io.github.yanfeiwuji.web.query.QueryCacheKeyConfig
