@@ -48,6 +48,7 @@ public class ValueToPrueValueTest {
     allAssert(strings);
   }
 
+
   private void allAssert(String... values) {
     Arrays.stream(values).map(covert::convert)
       .forEach(s -> {
