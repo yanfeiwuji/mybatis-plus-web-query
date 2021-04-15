@@ -10,13 +10,14 @@ public interface QueryValueToPrueValue {
   Object[] convert(String value);
 
 
-  String handlerNot(String value);
-
-  String handlerBrackets(String value);
-
-  String handlerLike(String value);
-
-  String handlerRule(String value);
-
   String handlerOr(String value);
+
+  String handlerStart(String value);
+
+  String handlerEnd(String value);
+
+  //String handlerBrackets(String value);
+
+
+  Object[] handlerMult(String value);
 }

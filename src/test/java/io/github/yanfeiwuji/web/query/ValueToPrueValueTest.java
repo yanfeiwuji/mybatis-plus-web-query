@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -14,7 +13,7 @@ import java.util.stream.Collectors;
  */
 public class ValueToPrueValueTest {
 
-  DefaultQueryValueToPrueValue covert = new DefaultQueryValueToPrueValue();
+  DefaultQueryValueToPrueValue convert = new DefaultQueryValueToPrueValue();
 
   String prueValue = "123";
 
@@ -48,9 +47,19 @@ public class ValueToPrueValueTest {
     allAssert(strings);
   }
 
+  @Test
+  public void testCom() {
+    String v1 = "or gt !1234 23 435";
+    String v2 = "or !(234)";
+    String v3 = "or !234";
+    assert convert.convert(v1)[0].toString().equals("!1234 23 435");
+    assert convert.convert(v2)[0].toString().equals("234");
+    assert convert.convert(v3)[0].toString().equals("234");
+
+  }
 
   private void allAssert(String... values) {
-    Arrays.stream(values).map(covert::convert)
+    Arrays.stream(values).map(convert::convert)
       .forEach(s -> {
         assert s[0].toString().equals(prueValue);
       });

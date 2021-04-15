@@ -30,4 +30,9 @@ public interface QueryConst {
   String RIGHT_BRACKET = ")";
 
   String OR_MARK = "or";
+
+  String OR_MARK_WITH_BLANK = "or ";
+
+  String NOT_NULL_STR = "!null";
+  String NULL_STR = "null";
 }

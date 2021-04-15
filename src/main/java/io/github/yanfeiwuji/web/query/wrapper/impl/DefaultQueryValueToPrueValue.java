@@ -1,6 +1,5 @@
 package io.github.yanfeiwuji.web.query.wrapper.impl;
 
-import cn.hutool.core.util.StrUtil;
 import io.github.yanfeiwuji.web.query.QueryConst;
 import io.github.yanfeiwuji.web.query.QueryRuleEnum;
 import io.github.yanfeiwuji.web.query.wrapper.QueryValueToPrueValue;
@@ -18,63 +17,11 @@ public class DefaultQueryValueToPrueValue implements QueryValueToPrueValue {
 
     String currentValue = value;
     currentValue = handlerOr(currentValue);
-    currentValue = handlerNot(currentValue);
-    currentValue = handlerBrackets(currentValue);
-    currentValue = handlerLike(currentValue);
-    currentValue = handlerRule(currentValue);
-
-    return new String[]{currentValue};
+    currentValue = handlerStart(currentValue);
+    currentValue = handlerEnd(currentValue);
+    return handlerMult(currentValue);
   }
 
-
-  // remove !
-  @Override
-  public String handlerNot(String value) {
-    if (value.startsWith(QueryConst.NOT_MARKER)) {
-      return value.substring(1);
-    }
-    return value;
-  }
-
-  /**
-   * 处理括号
-   *
-   * @param value
-   * @return
-   */
-  @Override
-  public String handlerBrackets(String value) {
-    if (value.startsWith(QueryConst.lEFT_BRACKET) && value.endsWith(QueryConst.RIGHT_BRACKET)) {
-      return value.substring(1, value.length() - 1);
-    }
-    return value;
-  }
-
-
-  @Override
-  public String handlerLike(String value) {
-    if (value.startsWith(QueryConst.LIKE) && value.endsWith(QueryConst.LIKE)) {
-      return value.substring(1, value.length() - 1);
-    }
-    if (value.startsWith(QueryConst.LIKE)) {
-      return value.substring(1);
-    }
-    if (value.endsWith(QueryConst.LIKE)) {
-      return value.substring(0, value.length() - 1);
-    }
-    return value;
-  }
-
-  @Override
-  public String handlerRule(String value) {
-    final String rule =
-      Arrays.stream(QueryRuleEnum.values())
-        .map(QueryRuleEnum::getCondition)
-        .map(this::ruleValueBlank)
-        .filter(value::startsWith).findFirst()
-        .orElse("");
-    return value.replace(rule, "");
-  }
 
   @Override
   public String handlerOr(String value) {
@@ -85,7 +32,45 @@ public class DefaultQueryValueToPrueValue implements QueryValueToPrueValue {
     return value;
   }
 
+  @Override
+  public String handlerStart(String value) {
+    final boolean present = Arrays.stream(QueryRuleEnum.values())
+      .map(QueryRuleEnum::getCondition)
+      .map(this::ruleValueBlank)
+      .anyMatch(value::startsWith);
+    if (present) {
+      return value.substring(2);
+    }
+    String needValue = value;
+    if (value.startsWith(QueryConst.NOT_MARKER)) {
+      needValue = value.substring(1);
+    }
+    if (needValue.startsWith(QueryConst.LIKE)) {
+      needValue = value.substring(1);
+    }
+
+    return needValue;
+  }
+
+  @Override
+  public String handlerEnd(String value) {
+    if (value.endsWith(QueryConst.LIKE)) {
+      return value.substring(0, value.length() - 1);
+    }
+    return value;
+  }
+
+  @Override
+  public Object[] handlerMult(String value) {
+    if (value.startsWith(QueryConst.lEFT_BRACKET) && value.endsWith(QueryConst.RIGHT_BRACKET)) {
+      return new Object[]{value.substring(1, value.length() - 1)};
+    } else {
+      return value.split(QueryConst.COMMA);
+    }
+  }
+
   private String ruleValueBlank(String str) {
     return str + " ";
   }
+
 }

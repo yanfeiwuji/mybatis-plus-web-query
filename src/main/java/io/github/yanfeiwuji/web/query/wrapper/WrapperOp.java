@@ -1,6 +1,8 @@
 package io.github.yanfeiwuji.web.query.wrapper;
 
 
+import java.util.Optional;
+
 /**
  * wrapper 操作 不包括 isNull isNotNull
  *
@@ -11,5 +13,9 @@ package io.github.yanfeiwuji.web.query.wrapper;
 public interface WrapperOp {
 
   void accept(boolean condition, Object column, Object... obj);
+
+  default void exec(boolean condition, Object column, Object... obj) {
+    accept(condition, column, obj);
+  }
 
 }

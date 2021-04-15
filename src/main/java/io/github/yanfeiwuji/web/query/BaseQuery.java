@@ -70,15 +70,7 @@ public class BaseQuery<T> {
 
   public QueryWrapper<T> query() {
 
-    // 属性拿到了
-    final List<Map.Entry<String, String[]>> entries = loadQueryParams();
-    // 属性拿到了
-    for (Map.Entry<String, String[]> e : entries) {// 只取第一个值
-      final String[] values = e.getValue();
-      String key = e.getKey();
-      Arrays.stream(values).forEach(System.out::println);
-      QueryWrapperUtil.installWrapper(findQueryClass(), wrapper, key, values[0]);
-    }
+    // TODO it
     return wrapper;
   }
 

@@ -6,5 +6,9 @@ package io.github.yanfeiwuji.web.query.wrapper;
  */
 @FunctionalInterface
 public interface WrapperHasNullOp {
-  void accept(boolean condition, Object column, Object obj);
+  void accept(boolean condition, Object column);
+
+  default void exec(boolean condition, Object column) {
+    accept(condition, column);
+  }
 }

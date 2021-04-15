@@ -11,8 +11,11 @@ import org.springframework.lang.NonNull;
 @Data
 @AllArgsConstructor
 public class WebQueryParam {
+
   @NonNull
   private String key;
+  @NonNull
+  private String column;
   @NonNull
   private String value;
 

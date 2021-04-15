@@ -14,15 +14,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class DefaultQueryToWrapperHasNullOp implements QueryToWrapperHasNullOp {
 
-  //private final QueryValueToPrueValue valueToPrueValue;
-
   @Override
   public WrapperHasNullOp queryToOp(QueryWrapper wrapper, WebQueryParam webQueryParam) {
     final String value = webQueryParam.getValue();
-
-    //valueToPrueValue.convert(value);
-    if (value.startsWith(QueryConst.NOT_MARKER)) {
-
+    if (QueryConst.NOT_NULL_STR.equals(value)) {
+      return wrapper::isNotNull;
+    } else if (QueryConst.NULL_STR.equals(value)) {
+      return wrapper::isNull;
     }
     return null;
   }
