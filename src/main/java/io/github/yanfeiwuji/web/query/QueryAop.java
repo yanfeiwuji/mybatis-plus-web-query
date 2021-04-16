@@ -55,7 +55,6 @@ public class QueryAop {
       queryClassName = matcher.group().replaceFirst(QUERY_PREFIX, "").replace(QUERY_SUFFIX, "");
     }
     // 不包含. 为泛形
-    System.out.println(queryClassName);
     if (queryClassName != null) {
       if (queryClassName.contains(DEFAULT_QUERY_CLASS) && queryClassName.contains(QueryConst.DOT)) {
         queryClassName = getTQueryClass(joinPoint);

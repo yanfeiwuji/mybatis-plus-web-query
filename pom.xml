@@ -11,8 +11,11 @@
 
   <groupId>io.github.yanfeiwuji</groupId>
   <artifactId>mybatis-plus-web-query</artifactId>
-  <version>0.0.1-RELEASE</version>
+<!--  <version>1.0.0-RELEASE</version>-->
+<!--  <version>1.0.0-snapshots</version>-->
+  <version>1.0.1-RELEASE</version>
   <name>mybatis-plus-web-query</name>
+  <packaging>jar</packaging>
   <description>添加mybatis的单表动态查询</description>
 
   <properties>
@@ -86,6 +89,9 @@
   </dependencies>
 
   <profiles>
+    <profile>
+      <id>local</id>
+    </profile>
     <profile>
       <id>release</id>
       <build>

@@ -10,7 +10,7 @@ import io.github.yanfeiwuji.web.query.wrapper.WrapperRule;
 
 /**
  * @author yanfeiwuji
-   2021/4/14 5:35 下午
+ * 2021/4/14 5:35 下午
  */
 public class DefaultQueryToWrapperSingleOp implements QueryToWrapperSingleOp {
 
@@ -78,7 +78,12 @@ public class DefaultQueryToWrapperSingleOp implements QueryToWrapperSingleOp {
       return wrapper::likeLeft;
     }
 
-    if (!value.startsWith(QueryConst.LIKE) && value.endsWith(QueryConst.LIKE)) {
+    if ( value.endsWith(QueryConst.LIKE)) {
+      if(value.startsWith(QueryConst.NOT_MARKER+QueryConst.LIKE)){
+        return wrapper::notLike;
+      }else if(value.startsWith(QueryConst.LIKE)){
+        return wrapper::like;
+      }
       return wrapper::likeRight;
     }
 
@@ -86,7 +91,8 @@ public class DefaultQueryToWrapperSingleOp implements QueryToWrapperSingleOp {
       return wrapper::like;
     }
 
-    if (value.startsWith(QueryConst.NOT_MARKER + QueryConst.LIKE) &&
+    if (value.startsWith(QueryConst.NOT_MARKER + QueryConst.LIKE)
+      &&
       value.endsWith(QueryConst.LIKE)) {
       return wrapper::notLike;
     }

@@ -1,34 +1,56 @@
-## mybatis-plus查询插件
+# mybatis-plus查询插件
 
-方便单表查询
+为mybatis添加方便的单表查询
 
-### 使用
+## 使用
 
+### 1要有mybatis-plus开发环境 [mybatis-plus](https://mp.baomidou.com/)
 
-```markdown
-Syntax highlighted code block
+### 2.maven中添加依赖
 
-# Header 1
-## Header 2
-### Header 3
+```xml
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+<dependency>
+  <groupId>io.github.yanfeiwuji</groupId>
+  <artifactId>mybatis-plus-web-query</artifactId>
+  <version>1.0.0-RELEASE</version>
+</dependency>
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### 3.controller
 
-### Jekyll Themes
+```java
+@GetMapping
+public Page<SysUser> baseQuery(BaseQuery<SysUser> query){
+  return sysUserMapper.selectPage(query.page(),query.query());
+  }
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/yanfeiwuji/mybatis-plus-web-query/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+### 4.效果
 
-### Support or Contact
+|  query params   | sql  |sql params|desc|
+|  ----  | ----  |---- |----|
+| username:A  | username = ? | A(String) ||
+| username:!A  | username <> ?| A(String)||
+| username:!null | username IS NOT NULL| ||
+| username:null | username IS NULL| ||
+|username:1*|username LIKE ?| 1%(String)||
+|username:*1|username LIKE ?|%1(String)||
+|username:\*1\*|username LIKE ?|%1%(String)||
+|age:ge 1|age >= ?|1(String)|中间有一个空格|
+|age:gt 1|age > ?|1(String)|中间有一个空格|
+|age:le 1|age <= ?|1(String)|中间有一个空格|
+|age:lt 1|age < ?|1(String)|中间有一个空格|
+|age:ne 1|age <> ?|1(String)|中间有一个空格|
+|username:11,A|username IN (?,?)|11(String), A(String)||
+|username:!(11,A)|username NOT IN (?, ?)|11(String), A(String)||
+|username:!\*1\*|username NOT LIKE ?|%1%(String)|
+|birthDay_begin:1970-01-01 birthDay_end:1970-01-02|birth_day >= ? AND birth_day <= ?|1970-01-01 08:00:00.0(Timestamp), 1970-01-02 08:00:00.0(Timestamp)|和你的jackson的配置是相同的|
+|username:*11 username:*A|username LIKE ? AND username LIKE ?|%11(String), %A(String)||
+|username:*11 username:or *A|username LIKE ? OR username = ?|%11(String), A(String)||
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+### 5.联系我
+
++ 微信:yanfeiwuji
++ qq:1327800522
++ email:1327800522@qq.com

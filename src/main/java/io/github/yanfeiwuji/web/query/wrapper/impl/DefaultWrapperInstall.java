@@ -1,17 +1,22 @@
 package io.github.yanfeiwuji.web.query.wrapper.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.yanfeiwuji.web.query.QueryConst;
 import io.github.yanfeiwuji.web.query.wrapper.*;
 import lombok.AllArgsConstructor;
 
+import java.io.IOException;
+import java.util.Map;
+
 /**
  * @author yanfeiwuji
-   2021/4/14 5:20 下午
+ * 2021/4/14 5:20 下午
  */
 @AllArgsConstructor
 public class DefaultWrapperInstall implements WrapperInstall {
-
 
   private final QueryToWrapperHasNullOp queryToWrapperHasNullOp;
 
@@ -21,9 +26,10 @@ public class DefaultWrapperInstall implements WrapperInstall {
 
   private final QueryValueToPrueValue queryValueToPrueValue;
 
+  private final ObjectMapper mapper;
 
   @Override
-  public void install(QueryWrapper wrapper, WebQueryParam webQueryParam) {
+  public void install(Class c, QueryWrapper wrapper, WebQueryParam webQueryParam) {
 
     final String column = webQueryParam.getColumn();
     // 检查or
@@ -50,6 +56,18 @@ public class DefaultWrapperInstall implements WrapperInstall {
 
     // not null
     if (wrapperOp != null && prueValues != null && prueValues.length == 1) {
+
+      String key = webQueryParam.getKey();
+      if (key.endsWith(QueryConst.BEGIN)) {
+        String needKey = key.substring(0, key.length() - QueryConst.BEGIN.length());
+        wrapperOp.exec(true, column, handlerDate(c, needKey, prueValues[0].toString()));
+        return;
+      }
+      if (key.endsWith(QueryConst.END)) {
+        String needKey = key.substring(0, key.length() - QueryConst.END.length());
+        wrapperOp.exec(true, column, handlerDate(c, needKey, prueValues[0].toString()));
+        return;
+      }
       wrapperOp.exec(true, column, prueValues[0]);
       return;
     }
@@ -71,4 +89,26 @@ public class DefaultWrapperInstall implements WrapperInstall {
       wrapper.or();
     }
   }
+
+
+  public Object handlerDate(Class<?> clazz, String key, String value) {
+    final Map<String, String> build = MapUtil.builder(key, value).build();
+    final String jsonStr;
+    Object o = null;
+    try {
+      jsonStr = mapper.writeValueAsString(build);
+      o = mapper.readValue(jsonStr, clazz);
+    } catch (IOException e) {
+      return value;
+    }
+
+    if (o != null) {
+      return BeanUtil.getFieldValue(o, key);
+
+    } else {
+      return value;
+    }
+  }
+
+
 }

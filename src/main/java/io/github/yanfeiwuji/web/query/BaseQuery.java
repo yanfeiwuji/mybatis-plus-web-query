@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author yanfeiwuji
-   2021/4/13 11:09 上午
+ * 2021/4/13 11:09 上午
  */
 @Data
 public class BaseQuery<T> {
@@ -79,9 +79,10 @@ public class BaseQuery<T> {
     // install wrapper
     entries.forEach(entry -> {
       final String key = entry.getKey();
+
       Arrays.stream(entry.getValue()).forEach(value -> {
-        System.out.println(value);
         wrapperInstall.install(
+          clazz,
           wrapper,
           new WebQueryParam(
             key,

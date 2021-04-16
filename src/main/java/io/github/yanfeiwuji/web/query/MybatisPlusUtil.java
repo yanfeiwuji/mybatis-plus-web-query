@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * @author yanfeiwuji
-   2021/3/27 10:13 下午
+ * 2021/3/27 10:13 下午
  */
 @UtilityClass
 public class MybatisPlusUtil {
@@ -27,6 +27,13 @@ public class MybatisPlusUtil {
     }
     //String putColumn = null;
 
+    if (property.endsWith(QueryConst.BEGIN)) {
+      property = property.substring(0, property.length() - QueryConst.BEGIN.length());
+    } else if (property.endsWith(QueryConst.END)) {
+      property = property.substring(0, property.length() - QueryConst.END.length());
+    }
+    final String needProperty = property;
+
 
     final TableInfo tableInfo = TableInfoHelper.getTableInfo(c);
 
@@ -35,7 +42,7 @@ public class MybatisPlusUtil {
       .getFieldList()
       .stream()
       .filter(tableFieldInfo ->
-        tableFieldInfo.getProperty().equals(property)
+        tableFieldInfo.getProperty().equals(needProperty)
       ).map(TableFieldInfo::getColumn)
       .findFirst()
       .orElse(tableInfo.getKeyColumn());

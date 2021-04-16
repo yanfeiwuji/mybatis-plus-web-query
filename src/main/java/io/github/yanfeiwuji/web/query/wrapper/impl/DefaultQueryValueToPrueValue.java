@@ -1,14 +1,19 @@
 package io.github.yanfeiwuji.web.query.wrapper.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import io.github.yanfeiwuji.web.query.QueryConst;
 import io.github.yanfeiwuji.web.query.QueryRuleEnum;
 import io.github.yanfeiwuji.web.query.wrapper.QueryValueToPrueValue;
 
+import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author yanfeiwuji
-   2021/4/15 9:48 上午
+ * 2021/4/15 9:48 上午
  */
 public class DefaultQueryValueToPrueValue implements QueryValueToPrueValue {
 
@@ -20,7 +25,11 @@ public class DefaultQueryValueToPrueValue implements QueryValueToPrueValue {
     currentValue = handlerStart(currentValue);
     currentValue = handlerEnd(currentValue);
 
-    return handlerMult(currentValue);
+    final Object[] objects = handlerMult(currentValue);
+    return Arrays.stream(objects)
+      .filter(Objects::nonNull)
+      .map(Object::toString)
+      .map(s -> NumberUtil.isNumber(s) ? NumberUtil.parseLong(s) : s).toArray();
   }
 
 
@@ -41,6 +50,7 @@ public class DefaultQueryValueToPrueValue implements QueryValueToPrueValue {
       return value;
     }
 
+
     final boolean present = Arrays.stream(QueryRuleEnum.values())
       .map(QueryRuleEnum::getCondition)
       .map(this::ruleValueBlank)
@@ -48,12 +58,13 @@ public class DefaultQueryValueToPrueValue implements QueryValueToPrueValue {
     if (present) {
       return value.substring(3);
     }
+
     String needValue = value;
-    if (value.startsWith(QueryConst.NOT_MARKER)) {
-      needValue = value.substring(1);
+    if (needValue.startsWith(QueryConst.NOT_MARKER)) {
+      needValue = needValue.substring(1);
     }
     if (needValue.startsWith(QueryConst.LIKE)) {
-      needValue = value.substring(1);
+      needValue = needValue.substring(1);
     }
 
     return needValue;

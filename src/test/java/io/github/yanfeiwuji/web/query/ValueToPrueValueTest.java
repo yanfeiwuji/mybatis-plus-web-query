@@ -47,7 +47,6 @@ public class ValueToPrueValueTest {
       .map(s -> s + " " + prueValue)
       .collect(Collectors.toList());
     final String[] strings = collect.toArray(new String[]{});
-    Arrays.stream(strings).forEach(System.out::println);
     allAssert(strings);
   }
 
