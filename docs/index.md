@@ -13,7 +13,7 @@
 <dependency>
   <groupId>io.github.yanfeiwuji</groupId>
   <artifactId>mybatis-plus-web-query</artifactId>
-  <version>1.0.0-RELEASE</version>
+  <version>1.0.1-RELEASE</version>
 </dependency>
 ```
 
