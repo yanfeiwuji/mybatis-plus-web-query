@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 /**
  * @author yanfeiwuji
- * @date 2021/3/27 6:26 下午
+   2021/3/27 6:26 下午
  */
 @Getter
 public enum QueryRuleEnum {

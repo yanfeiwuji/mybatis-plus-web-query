@@ -7,17 +7,20 @@ import lombok.AllArgsConstructor;
 
 /**
  * @author yanfeiwuji
- * @date 2021/4/14 5:20 下午
+   2021/4/14 5:20 下午
  */
 @AllArgsConstructor
 public class DefaultWrapperInstall implements WrapperInstall {
 
 
-  private final DefaultQueryToWrapperHasNullOp queryToWrapperHasNullOp;
+  private final QueryToWrapperHasNullOp queryToWrapperHasNullOp;
 
-  private final DefaultQueryToWrapperOp queryToWrapperOp;
+  private final QueryToWrapperMultOp queryToWrapperMultOp;
 
-  private final DefaultQueryValueToPrueValue queryValueToPrueValue;
+  private final QueryToWrapperSingleOp queryToWrapperOp;
+
+  private final QueryValueToPrueValue queryValueToPrueValue;
+
 
   @Override
   public void install(QueryWrapper wrapper, WebQueryParam webQueryParam) {
@@ -32,15 +35,25 @@ public class DefaultWrapperInstall implements WrapperInstall {
       return;
     }
 
-
-    final WrapperOp wrapperOp = queryToWrapperOp.queryToOp(wrapper, webQueryParam);
+    // 获取值
     final Object[] prueValues = queryValueToPrueValue.convert(webQueryParam.getValue());
 
-    // not null
-    if (wrapperOp == null) {
+    final WrapperMultOp wrapperMultOp = queryToWrapperMultOp.queryToOp(wrapper, webQueryParam);
+
+    // 执行查询
+    if (wrapperMultOp != null) {
+      wrapperMultOp.exec(true, column, prueValues);
       return;
     }
-    wrapperOp.exec(true, column, prueValues);
+
+    final WrapperOp wrapperOp = queryToWrapperOp.queryToOp(wrapper, webQueryParam);
+
+    // not null
+    if (wrapperOp != null && prueValues != null && prueValues.length == 1) {
+      wrapperOp.exec(true, column, prueValues[0]);
+      return;
+    }
+    // handler one and more
   }
 
   private WrapperRule toWrapperRule(String value) {

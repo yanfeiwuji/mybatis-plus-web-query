@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 /**
  * @author yanfeiwuji
- * @date 2021/4/14 5:38 下午
+   2021/4/14 5:38 下午
  */
 @AllArgsConstructor
 public enum WrapperRule {

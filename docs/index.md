@@ -1,12 +1,9 @@
-## Welcome to GitHub Pages
+## mybatis-plus查询插件
 
-You can use the [editor on GitHub](https://github.com/yanfeiwuji/mybatis-plus-web-query/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+方便单表查询
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### 使用
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
 ```markdown
 Syntax highlighted code block

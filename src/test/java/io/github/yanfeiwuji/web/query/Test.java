@@ -2,7 +2,7 @@ package io.github.yanfeiwuji.web.query;
 
 /**
  * @author yanfeiwuji
- * @date 2021/4/14 4:15 下午
+   2021/4/14 4:15 下午
  */
 
 public class Test {

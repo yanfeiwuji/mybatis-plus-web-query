@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 /**
  * @author yanfeiwuji
- * @date 2021/4/14 4:47 下午
+   2021/4/14 4:47 下午
  */
 public interface WrapperInstall {
   void install(QueryWrapper wrapper, WebQueryParam dbQueryParam);

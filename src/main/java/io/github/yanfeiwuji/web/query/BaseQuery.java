@@ -1,11 +1,14 @@
 package io.github.yanfeiwuji.web.query;
 
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.github.yanfeiwuji.web.query.wrapper.WebQueryParam;
+import io.github.yanfeiwuji.web.query.wrapper.WrapperInstall;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,11 +24,12 @@ import java.util.stream.Collectors;
 
 /**
  * @author yanfeiwuji
- * @date 2021/4/13 11:09 上午
+   2021/4/13 11:09 上午
  */
 @Data
 public class BaseQuery<T> {
 
+  private static final WrapperInstall wrapperInstall = SpringUtil.getBean(WrapperInstall.class);
 
   @Getter
   @Setter
@@ -69,7 +73,23 @@ public class BaseQuery<T> {
   }
 
   public QueryWrapper<T> query() {
+    Class clazz = findQueryClass();
 
+    final List<Map.Entry<String, String[]>> entries = loadQueryParams();
+    // install wrapper
+    entries.forEach(entry -> {
+      final String key = entry.getKey();
+      Arrays.stream(entry.getValue()).forEach(value -> {
+        System.out.println(value);
+        wrapperInstall.install(
+          wrapper,
+          new WebQueryParam(
+            key,
+            MybatisPlusUtil.entityPropertyToColumn(clazz, key),
+            value
+          ));
+      });
+    });
     // TODO it
     return wrapper;
   }

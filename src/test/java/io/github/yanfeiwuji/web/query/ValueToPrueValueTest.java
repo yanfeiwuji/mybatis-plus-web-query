@@ -1,5 +1,6 @@
 package io.github.yanfeiwuji.web.query;
 
+import cn.hutool.json.JSONUtil;
 import io.github.yanfeiwuji.web.query.wrapper.impl.DefaultQueryValueToPrueValue;
 import org.junit.Test;
 
@@ -9,7 +10,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author yanfeiwuji
- * @date 2021/4/15 4:27 下午
+   2021/4/15 4:27 下午
  */
 public class ValueToPrueValueTest {
 
@@ -29,6 +30,7 @@ public class ValueToPrueValueTest {
   public void testNot() {
     String not1 = "!(" + prueValue + ")";
     String not2 = "!" + prueValue;
+    allAssert(not1, not2);
   }
 
   @Test
@@ -41,9 +43,11 @@ public class ValueToPrueValueTest {
 
   @Test
   public void testRule() {
-    final List<String> collect = Arrays.stream(QueryRuleEnum.values()).map(QueryRuleEnum::getCondition).map(s -> s + " " + prueValue)
+    final List<String> collect = Arrays.stream(QueryRuleEnum.values()).map(QueryRuleEnum::getCondition)
+      .map(s -> s + " " + prueValue)
       .collect(Collectors.toList());
     final String[] strings = collect.toArray(new String[]{});
+    Arrays.stream(strings).forEach(System.out::println);
     allAssert(strings);
   }
 

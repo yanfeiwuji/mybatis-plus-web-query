@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * @author yanfeiwuji
- * @date 2021/3/27 10:13 下午
+   2021/3/27 10:13 下午
  */
 @UtilityClass
 public class MybatisPlusUtil {

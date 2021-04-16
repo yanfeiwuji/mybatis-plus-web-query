@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 /**
  * @author yanfeiwuji
- * @date 2021/4/15 9:48 上午
+   2021/4/15 9:48 上午
  */
 public class DefaultQueryValueToPrueValue implements QueryValueToPrueValue {
 
@@ -19,6 +19,7 @@ public class DefaultQueryValueToPrueValue implements QueryValueToPrueValue {
     currentValue = handlerOr(currentValue);
     currentValue = handlerStart(currentValue);
     currentValue = handlerEnd(currentValue);
+
     return handlerMult(currentValue);
   }
 
@@ -34,12 +35,18 @@ public class DefaultQueryValueToPrueValue implements QueryValueToPrueValue {
 
   @Override
   public String handlerStart(String value) {
+
+    // 多值不处理
+    if (value.contains(QueryConst.COMMA)) {
+      return value;
+    }
+
     final boolean present = Arrays.stream(QueryRuleEnum.values())
       .map(QueryRuleEnum::getCondition)
       .map(this::ruleValueBlank)
       .anyMatch(value::startsWith);
     if (present) {
-      return value.substring(2);
+      return value.substring(3);
     }
     String needValue = value;
     if (value.startsWith(QueryConst.NOT_MARKER)) {
@@ -64,9 +71,12 @@ public class DefaultQueryValueToPrueValue implements QueryValueToPrueValue {
   public Object[] handlerMult(String value) {
     if (value.startsWith(QueryConst.lEFT_BRACKET) && value.endsWith(QueryConst.RIGHT_BRACKET)) {
       return new Object[]{value.substring(1, value.length() - 1)};
-    } else {
-      return value.split(QueryConst.COMMA);
     }
+    // not in
+    if (value.startsWith(QueryConst.NOT_MARKER + QueryConst.lEFT_BRACKET)) {
+      return value.substring(2, value.length() - 1).split(QueryConst.COMMA);
+    }
+    return value.split(QueryConst.COMMA);
   }
 
   private String ruleValueBlank(String str) {

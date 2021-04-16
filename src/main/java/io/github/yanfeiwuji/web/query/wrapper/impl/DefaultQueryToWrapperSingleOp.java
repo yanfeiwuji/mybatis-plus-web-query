@@ -2,7 +2,7 @@ package io.github.yanfeiwuji.web.query.wrapper.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.github.yanfeiwuji.web.query.QueryConst;
-import io.github.yanfeiwuji.web.query.wrapper.QueryToWrapperOp;
+import io.github.yanfeiwuji.web.query.wrapper.QueryToWrapperSingleOp;
 import io.github.yanfeiwuji.web.query.wrapper.WebQueryParam;
 import io.github.yanfeiwuji.web.query.wrapper.WrapperOp;
 import io.github.yanfeiwuji.web.query.wrapper.WrapperRule;
@@ -10,9 +10,9 @@ import io.github.yanfeiwuji.web.query.wrapper.WrapperRule;
 
 /**
  * @author yanfeiwuji
- * @date 2021/4/14 5:35 下午
+   2021/4/14 5:35 下午
  */
-public class DefaultQueryToWrapperOp implements QueryToWrapperOp {
+public class DefaultQueryToWrapperSingleOp implements QueryToWrapperSingleOp {
 
   @Override
   public WrapperOp queryToOp(QueryWrapper wrapper, WebQueryParam param) {
@@ -37,15 +37,6 @@ public class DefaultQueryToWrapperOp implements QueryToWrapperOp {
       return wrapperOp;
     }
 
-    wrapperOp = handlerIn(wrapper, param);
-    if (wrapperOp != null) {
-      return wrapperOp;
-    }
-
-    wrapperOp = handlerNotIn(wrapper, param);
-    if (wrapperOp != null) {
-      return wrapperOp;
-    }
 
     wrapperOp = handlerNot(wrapper, param);
     if (wrapperOp != null) {
@@ -121,25 +112,25 @@ public class DefaultQueryToWrapperOp implements QueryToWrapperOp {
     return null;
   }
 
-  @Override
-  public WrapperOp handlerIn(QueryWrapper wrapper, WebQueryParam param) {
-    final String value = param.getValue();
-    //有逗号不是一左括号开头
-    if (value.contains(QueryConst.COMMA) && !value.startsWith(QueryConst.lEFT_BRACKET)) {
-      return wrapper::in;
-    }
-
-    return null;
-  }
-
-  @Override
-  public WrapperOp handlerNotIn(QueryWrapper wrapper, WebQueryParam param) {
-    final String value = param.getValue();
-    if (value.contains(QueryConst.COMMA) && value.startsWith(QueryConst.NOT_MARKER + QueryConst.lEFT_BRACKET)) {
-      return wrapper::notIn;
-    }
-    return null;
-  }
+//  @Override
+//  public WrapperOp handlerIn(QueryWrapper wrapper, WebQueryParam param) {
+//    final String value = param.getValue();
+//    //有逗号不是一左括号开头
+//    if (value.contains(QueryConst.COMMA) && !value.startsWith(QueryConst.NOT_MARKER + QueryConst.lEFT_BRACKET)) {
+//      return wrapper::in;
+//    }
+//
+//    return null;
+//  }
+//
+//  @Override
+//  public WrapperOp handlerNotIn(QueryWrapper wrapper, WebQueryParam param) {
+//    final String value = param.getValue();
+//    if (value.contains(QueryConst.COMMA) && value.startsWith(QueryConst.NOT_MARKER + QueryConst.lEFT_BRACKET)) {
+//      return wrapper::notIn;
+//    }
+//    return null;
+//  }
 
   @Override
   public WrapperOp handlerNot(QueryWrapper wrapper, WebQueryParam param) {

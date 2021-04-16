@@ -2,7 +2,7 @@ package io.github.yanfeiwuji.web.query.wrapper;
 
 /**
  * @author yanfeiwuji
- * @date 2021/4/15 8:47 上午
+   2021/4/15 8:47 上午
  */
 public interface QueryValueToPrueValue {
 

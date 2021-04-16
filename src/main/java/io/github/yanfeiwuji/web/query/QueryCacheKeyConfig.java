@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author yanfeiwuji
- * @date 2021/4/13 11:49 上午
+   2021/4/13 11:49 上午
  */
 @Configuration
 public class QueryCacheKeyConfig {
