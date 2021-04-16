@@ -25,11 +25,6 @@ public class WrapperInstallTest {
     QueryWrapper wrapper = new QueryWrapper();
 
 
-//    WebQueryParam webQueryParam = new WebQueryParam("key", "tvt", "!*123*");
-//    install.install(TestEntity.class, wrapper, webQueryParam);
-//    final String targetSql = wrapper.getTargetSql();
-//    System.out.println(targetSql);
-
     System.out.println(NumberUtil.isNumber("123"));
     System.out.println(NumberUtil.parseLong("123"));
     final String s = JSONUtil.toJsonStr(wrapper.getParamNameValuePairs());
